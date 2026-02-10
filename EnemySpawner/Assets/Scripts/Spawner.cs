@@ -47,17 +47,12 @@ public class Spawner : MonoBehaviour
 
     private Vector3 GetRandomDirection()
     {
-        return _direction[Random.Range(0, _direction.Count - 1)];
+        return _direction[Random.Range(0, _direction.Count)];
     }
 
     private Enemy Create()
     {
         Enemy enemy = Instantiate(_prefab);
-
-        Vector3 position = GetRandomSpawnPosition();
-        Vector3 direction = GetRandomDirection();
-
-        enemy.Initialize(position, direction);
 
         return enemy;
     }
@@ -69,6 +64,11 @@ public class Spawner : MonoBehaviour
 
     private void OnGet(Enemy enemy)
     {
+        Vector3 position = GetRandomSpawnPosition();
+        Vector3 direction = GetRandomDirection();
+
+        enemy.Initialize(position, direction);
+
         enemy.gameObject.SetActive(true);
 
         enemy.DestroyTime += OnRelease;

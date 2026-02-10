@@ -11,10 +11,11 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float _maxLifeTime;
 
     private Rigidbody _rigidbody;
-    private Vector3 _direction;
     private MoverEnemy _mover;
     private Animator _animator;
 
+    private Vector3 _direction;
+    
     private float _timeDestroy;
 
     public event Action<Enemy> DestroyTime;
@@ -42,6 +43,8 @@ public class Enemy : MonoBehaviour
 
         transform.position = position;
         _direction = direction;
+
+        _animator.enabled = true;
     }
 
     public void SetDefaultSettings()
@@ -51,6 +54,8 @@ public class Enemy : MonoBehaviour
 
         _rigidbody.angularVelocity = Vector3.zero;
         _rigidbody.linearVelocity = Vector3.zero;
+
+        _animator.enabled = false;
     }
 
     private IEnumerator CountTimer()
