@@ -2,16 +2,16 @@ using UnityEngine;
 
 public class MoverEnemy : MonoBehaviour
 {
-    public void Move(Vector3 direction, float speed, float rotationSpeed)
+    public void Move(Vector3 targetPosition, float speed, float rotationSpeed)
     {
-        Quaternion targetRotation = Quaternion.LookRotation(direction);
+        Quaternion targetRotation = Quaternion.LookRotation(targetPosition - transform.position);
 
         transform.rotation = Quaternion.Slerp(
             transform.rotation,
             targetRotation,
-            rotationSpeed * Time.deltaTime
+            Time.deltaTime * rotationSpeed 
         );
 
-        transform.position += speed * direction * Time.deltaTime;
+        transform.position = Vector3.MoveTowards(transform.position, targetPosition, speed * Time.deltaTime);
     }
 }

@@ -50,7 +50,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 714730436251560600, guid: 67fcd39322c5e9c4ab0eb785909c1ad7, type: 3}
       propertyPath: m_Name
-      value: HumanDummy_F Yellow Variant
+      value: Enemy
       objectReference: {fileID: 0}
     - target: {fileID: 6071072146822703704, guid: 67fcd39322c5e9c4ab0eb785909c1ad7, type: 3}
       propertyPath: m_Avatar
@@ -59,7 +59,7 @@ PrefabInstance:
     - target: {fileID: 6071072146822703704, guid: 67fcd39322c5e9c4ab0eb785909c1ad7, type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: b6e743b2c1c786d4d8b11596f3b72070, type: 2}
+      objectReference: {fileID: 9100000, guid: 0646fe3a7a1cf9044901a9b4722d108e, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -121,10 +121,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c153e4e3b6513ba4da640e3fbfb11a79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Enemy
-  _speed: 2
+  _speed: 1.4
   _rotationSpeed: 10
-  _minLifeTime: 10
-  _maxLifeTime: 20
 --- !u!114 &-1109112844773307416
 MonoBehaviour:
   m_ObjectHideFlags: 0

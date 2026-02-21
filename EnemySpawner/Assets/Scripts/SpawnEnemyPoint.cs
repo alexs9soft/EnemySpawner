@@ -1,20 +1,19 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class Spawner : MonoBehaviour
+public class SpawnEnemyPoint : MonoBehaviour
 {
-    [SerializeField] private List<Transform> _spawnPoints;
+    [SerializeField] private Transform _spawnPoints;
     [SerializeField] private Enemy _prefab;
-    
-    [SerializeField] private int _poolMaxSize;
-    [SerializeField] private int _poolCapacity;
+    [SerializeField] private Transform _targetPositon;
 
     [SerializeField] private float _spawnInterval;
 
+    [SerializeField] private int _poolMaxSize;
+    [SerializeField] private int _poolCapacity;
+
     private ObjectPool<Enemy> _pool;
-    private List<Vector3> _direction;
 
     private void Awake()
     {
@@ -27,27 +26,11 @@ public class Spawner : MonoBehaviour
             defaultCapacity: _poolCapacity,
             maxSize: _poolMaxSize
         );
-
-        _direction = new List<Vector3>() { Vector3.left, Vector3.right, Vector3.back, Vector3.forward };
     }
 
     private void Start()
     {
-        _spawnPoints = new List<Transform>(_spawnPoints);
-
         StartCoroutine(SpawnTimer());
-    }
-
-    private Vector3 GetRandomSpawnPosition()
-    {
-        int randomIndex = UserUtils.GenerateRandomNumber(0, _spawnPoints.Count);
-
-        return _spawnPoints[randomIndex].transform.position;
-    }
-
-    private Vector3 GetRandomDirection()
-    {
-        return _direction[Random.Range(0, _direction.Count)];
     }
 
     private Enemy Create()
@@ -64,14 +47,12 @@ public class Spawner : MonoBehaviour
 
     private void OnGet(Enemy enemy)
     {
-        Vector3 position = GetRandomSpawnPosition();
-        Vector3 direction = GetRandomDirection();
 
-        enemy.Initialize(position, direction);
+        enemy.Initialize(transform.position, _targetPositon);
 
         enemy.gameObject.SetActive(true);
 
-        enemy.DestroyTime += OnRelease;
+        enemy.DestroyEnemy += OnRelease;
     }
 
     private void OnRelease(Enemy enemy)
@@ -86,7 +67,7 @@ public class Spawner : MonoBehaviour
     {
         _pool.Release(enemy);
 
-        enemy.DestroyTime -= OnRelease;
+        enemy.DestroyEnemy -= OnRelease;
     }
 
     private IEnumerator SpawnTimer()

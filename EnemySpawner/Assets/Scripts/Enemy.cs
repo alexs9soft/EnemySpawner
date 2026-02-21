@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody), typeof(MoverEnemy), typeof(Animator))]
@@ -7,18 +6,14 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _speed;
     [SerializeField] private float _rotationSpeed;
-    [SerializeField] private float _minLifeTime;
-    [SerializeField] private float _maxLifeTime;
 
     private Rigidbody _rigidbody;
     private MoverEnemy _mover;
     private Animator _animator;
 
-    private Vector3 _direction;
-    
-    private float _timeDestroy;
+    private Transform _targetPosition;
 
-    public event Action<Enemy> DestroyTime;
+    public event Action<Enemy> DestroyEnemy;
 
     private void Awake()
     {
@@ -27,22 +22,23 @@ public class Enemy : MonoBehaviour
         _animator = GetComponent<Animator>();
     }
 
-    private void Start()
-    {
-        StartCoroutine(CountTimer());
-    }
-
     private void Update()
     {
-        _mover.Move(_direction, _speed, _rotationSpeed);
+        _mover.Move(_targetPosition.position, _speed, _rotationSpeed);
     }
 
-    public void Initialize(Vector3 position, Vector3 direction)
+    private void OnCollisionEnter(Collision collision)
     {
-        _timeDestroy = UnityEngine.Random.Range(_minLifeTime, _maxLifeTime);
+        if (collision.collider.TryGetComponent(out Adventurer _))
+        {
+            DestroyEnemy?.Invoke(this);
+        }
+    }
 
+    public void Initialize(Vector3 position, Transform targetPosition)
+    {
         transform.position = position;
-        _direction = direction;
+        _targetPosition = targetPosition;
 
         _animator.enabled = true;
     }
@@ -56,14 +52,5 @@ public class Enemy : MonoBehaviour
         _rigidbody.linearVelocity = Vector3.zero;
 
         _animator.enabled = false;
-    }
-
-    private IEnumerator CountTimer()
-    {
-        var wait = new WaitForSeconds(_timeDestroy);
-
-        yield return wait;
-
-        DestroyTime?.Invoke(this);
     }
 }
